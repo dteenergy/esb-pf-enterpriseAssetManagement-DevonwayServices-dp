@@ -191,7 +191,7 @@
 						<Value>@ALM_Location.mpg.params.ReportingAuthority.value@</Value>
 					</ModifiedConfig>
 					<ModifiedConfig>
-						<Match>*/*/services/multiprotocol-gateway?Name=ALM_Location&amp;Property=StylesheetParameters/ParameterValue&amp;Value=HVIPK14696</Match>
+						<Match>*/*/services/multiprotocol-gateway?Name=ALM_Location&amp;Property=StylesheetParameters/ParameterValue&amp;Value=sampleKey</Match>
 						<Type>change</Type>
 						<Property/>
 						<Value>@ALM_Location.mpg.params.key.value@</Value>
