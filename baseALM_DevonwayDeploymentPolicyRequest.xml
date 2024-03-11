@@ -8,7 +8,7 @@
 						<Match>*/*/network/mq-qm?Name=ALM_Gateway_sequence_Qmgr&amp;Property=HostName</Match>
 						<Type>change</Type>
 						<Property/>
-						<Value>@ALM_Gateway_sequence_Qmgr.mq.Hostame@</Value>
+						<Value>@ALM_Gateway_sequence_Qmgr.mq.HostName@</Value>
 					</ModifiedConfig>
 					<ModifiedConfig>
 						<Match>*/*/network/mq-qm?Name=ALM_Gateway_sequence_Qmgr&amp;Property=ChannelName</Match>
@@ -38,7 +38,7 @@
 						<Match>*/*/network/mq-qm?Name=ALM_Location&amp;Property=HostName</Match>
 						<Type>change</Type>
 						<Property/>
-						<Value>@ALM_Location.mq.Hostame@</Value>
+						<Value>@ALM_Location.mq.HostName@</Value>
 					</ModifiedConfig>
 					<ModifiedConfig>
 						<Match>*/*/network/mq-qm?Name=ALM_Location&amp;Property=ChannelName</Match>
@@ -80,7 +80,7 @@
 						<Match>*/*/network/mq-qm?Name=ALM_Location_QManager&amp;Property=HostName</Match>
 						<Type>change</Type>
 						<Property/>
-						<Value>@ALM_Location_QManager.mq.Hostame@</Value>
+						<Value>@ALM_Location_QManager.mq.HostName@</Value>
 					</ModifiedConfig>
 					<ModifiedConfig>
 						<Match>*/*/network/mq-qm?Name=ALM_Location_QManager&amp;Property=ChannelName</Match>
