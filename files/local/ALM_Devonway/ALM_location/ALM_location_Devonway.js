@@ -3,6 +3,7 @@ var fs = require('fs');
 var hm = require('header-metadata');
 var sm = require('service-metadata');
 var ctx = session.name("ALM_Location") || session.createContext("ALM_Location");
+var Id = ctx.getVar("Id");
 var logger = console.options({
 	'category': 'all'
 });
@@ -19,6 +20,9 @@ session.input.readAsJSON(function(readAsJSONError, incomingdata) {
 			sslClientProfile: 'ALM_ClientProfile',
 			method: 'POST',
 			contentType: 'application/json',
+			headers: {
+				'osiApiToken': Id
+			},
 			data: incomingdata
 		};
 		try {
