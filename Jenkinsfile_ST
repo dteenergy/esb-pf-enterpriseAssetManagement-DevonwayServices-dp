@@ -1,0 +1,69 @@
+pipeline {
+
+    // Instructs Jenkins to use the buildconductor docker image to run this pipeline
+    
+    agent {
+        docker { 
+            image 'sitaramdocke/jenkins-buildconductor-wdp:v2' 
+            label 'docker'
+        }
+    }
+
+    stages {
+    
+        // Pull down source code from Git repo
+        
+		stage('Checkout'){
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/test']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'load']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:dteenergy/esb-pf-enterpriseAssetManagement-DevonwayServices-dp.git']]])
+            }
+       }
+	  // Create deployment policy and deploy
+		stage('Create Policy and Deploy') {
+            
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'dp-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {            
+
+                    sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02ST dp-st.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwaySTDeploymentPolicy conf/ALM_Devonway.ST.properties"
+                  
+                }
+            }
+        }
+       
+        // Import service configuration using deployment policy
+        
+        stage('Deploy Zip') {
+            
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'dp-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {            
+
+                    sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02ST dp-st.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwaySTDeploymentPolicy"
+                 
+                }
+            }
+	 
+        }
+		// Upload files
+		
+		stage('Upload Files') {
+            
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'dp-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {            
+
+                    sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02ST dp-st.dteco.com 5550 $USERNAME $PASSWORD" 
+
+            }
+        }
+	}
+		}
+	post {
+        always {
+            echo 'I will always say Hello again!!!'
+            
+            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+                to: "PF_ESB_OPS@dteenergy.com"
+                }
+          }
+}
