@@ -185,7 +185,7 @@
 						<Value>@ALM_Location.mpg.params.IPMPClass.value@</Value>
 					</ModifiedConfig>
 					<ModifiedConfig>
-						<Match>*/*/services/multiprotocol-gateway?Name=ALM_Location&amp;Property=StylesheetParameters/ParameterValue&amp;Value=DTEEnergy-Fermi2</Match>
+						<Match>*/*/services/multiprotocol-gateway?Name=ALM_Location&amp;Property=StylesheetParameters/ParameterValue&amp;Value=Sample</Match>
 						<Type>change</Type>
 						<Property/>
 						<Value>@ALM_Location.mpg.params.ReportingAuthority.value@</Value>
