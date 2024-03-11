@@ -15,7 +15,7 @@ pipeline {
         
 		stage('Checkout'){
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/test']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'load']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:dteenergy/esb-pf-enterpriseAssetManagement-DevonwayServices-dp.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/feature']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'load']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:dteenergy/esb-pf-enterpriseAssetManagement-DevonwayServices-dp.git']]])
             }
        }
 	  // Create deployment policy and deploy
