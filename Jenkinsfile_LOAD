@@ -1,0 +1,84 @@
+pipeline {
+
+    // Instructs Jenkins to use the buildconductor docker image to run this pipeline
+    
+    agent {
+        docker { 
+            image 'sitaramdocke/jenkins-buildconductor-wdp:v2' 
+            label 'docker'
+        }
+    }
+
+    stages {
+    
+        // Pull down source code from Git repo
+        
+		stage('Checkout'){
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/test']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'load']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:dteenergy/esb-pf-enterpriseAssetManagement-DevonwayServices-dp']]])
+            }
+       }
+	  // Create deployment policy and deploy
+		stage('Create Policy and Deploy') {
+            
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'dp-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {            
+					
+					sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L01 dp-l01.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL01DeploymentPolicy conf/ALM_Devonway.L01.properties "
+					
+					sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L02 dp-l02.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL02DeploymentPolicy conf/ALM_Devonway.L02.properties "
+					
+					sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL03DeploymentPolicy conf/ALM_Devonway.L03.properties "
+					
+					sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL04DeploymentPolicy conf/ALM_Devonway.L04.properties "
+					
+                  
+                }
+            }
+        }
+       
+        // Import service configuration using deployment policy
+        
+        stage('Deploy Zip') {
+            
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'dp-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {            
+
+                    sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L01 dp-l01.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL01DeploymentPolicy"
+					sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L02 dp-l02.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL02DeploymentPolicy"
+					sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL03DeploymentPolicy"
+					sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL04DeploymentPolicy"
+					
+                 
+                }
+            }
+	 
+        }
+		// Upload files
+		
+		stage('Upload Files') {
+            
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'dp-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {            
+
+                    sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L01 dp-l01.dteco.com 5550 $USERNAME $PASSWORD" 
+					sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L02 dp-l02.dteco.com 5550 $USERNAME $PASSWORD" 
+					sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD"
+					sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD"
+					
+
+            }
+        }
+	}
+		}
+	post {
+        always {
+            echo 'I will always say Hello again!!!'
+            
+            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+                to: "PF_ESB_OPS@dteenergy.com"
+                }
+          }
+}
