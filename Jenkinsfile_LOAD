@@ -28,9 +28,9 @@ pipeline {
 					
 					sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L02 dp-l02.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL02DeploymentPolicy conf/ALM_Devonway.L02.properties "
 					
-					sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL03DeploymentPolicy conf/ALM_Devonway.L03.properties "
+					//sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL03DeploymentPolicy conf/ALM_Devonway.L03.properties "
 					
-					sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL04DeploymentPolicy conf/ALM_Devonway.L04.properties "
+					//sh "/buildconductor/wdp/run-automation.sh overrideAndDeployDeploymentPolicy EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD baseALM_DevonwayDeploymentPolicyRequest.xml ALM_DevonwayL04DeploymentPolicy conf/ALM_Devonway.L04.properties "
 					
                   
                 }
@@ -46,8 +46,8 @@ pipeline {
 
                     sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L01 dp-l01.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL01DeploymentPolicy"
 					sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L02 dp-l02.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL02DeploymentPolicy"
-					sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL03DeploymentPolicy"
-					sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL04DeploymentPolicy"
+					//sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL03DeploymentPolicy"
+					//sh "/buildconductor/wdp/run-automation.sh deployZip EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD ALM_Devonway.zip ALM_DevonwayL04DeploymentPolicy"
 					
                  
                 }
@@ -63,8 +63,8 @@ pipeline {
 
                     sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L01 dp-l01.dteco.com 5550 $USERNAME $PASSWORD" 
 					sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L02 dp-l02.dteco.com 5550 $USERNAME $PASSWORD" 
-					sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD"
-					sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD"
+					//sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L03 dp-l03.dteco.com 5550 $USERNAME $PASSWORD"
+					//sh "/buildconductor/wdp/run-automation.sh deployFiles files EnterpriseAssetManagement02L04 dp-l04.dteco.com 5550 $USERNAME $PASSWORD"
 					
 
             }
